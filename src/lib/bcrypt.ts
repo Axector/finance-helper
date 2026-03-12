@@ -1,5 +1,3 @@
-'use server';
-
 import { hashSync, compareSync } from 'bcrypt-ts'
 
 export const hashPassword = async (password: string) => {
