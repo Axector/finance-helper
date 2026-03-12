@@ -10,12 +10,12 @@ const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  logger: console.log,
 };
 
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const mainCollectionName = process.env.NEXT_PUBLIC_FIREBASE_MAIN_COLLECTION_NAME as string;
+const LOGGER = console.log;
 
 export class DataBaseController {
   static getCleanData = (firebaseData: any) => {
@@ -74,7 +74,7 @@ export class DataBaseController {
 
       return this.getCleanData(fields);
     } catch (e) {
-      firebaseConfig.logger('XXX DataBaseController.read:', e);
+      LOGGER('XXX DataBaseController.read:', e);
       return null;
     }
   };
@@ -88,7 +88,7 @@ export class DataBaseController {
 
       return true;
     } catch (e) {
-      firebaseConfig.logger('XXX DataBaseController.update:', e);
+      LOGGER('XXX DataBaseController.update:', e);
       return false;
     }
   };
