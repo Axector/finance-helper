@@ -101,6 +101,7 @@ export async function checkUser(email: string): Promise<boolean> {
 export async function getUser(email: string, password: string): Promise<User | null> {
     try {
         const user = await DataBaseController.read(email);
+        LOGGER('XXX getUser', user);
         if (!user) return null;
 
         const { password: hashedPassword, ...otherUserData } = user;
@@ -117,7 +118,7 @@ export async function getUser(email: string, password: string): Promise<User | n
 export async function loginUser(email: string, password: string): Promise<boolean> {
     const user = await getUser(email, password);
     if (!user) return false;
-
+    LOGGER('XXX loginUser', user);
 
     const { budgetPlans = null } = user;
     if (budgetPlans) {
