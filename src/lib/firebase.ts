@@ -15,7 +15,7 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const mainCollectionName = process.env.NEXT_PUBLIC_FIREBASE_MAIN_COLLECTION_NAME as string;
-const LOGGER = console.log;
+const LOGGER = process.env.NEXT_PUBLIC_DEVELOPMENT ? console.log : () => {};
 
 export class DataBaseController {
   static getCleanData = (firebaseData: any) => {
