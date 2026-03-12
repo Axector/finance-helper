@@ -86,7 +86,7 @@ export async function createUser(email: string, password: string): Promise<boole
         const hashedPassword = await hashPassword(password);
         await DataBaseController.update({ email, password: hashedPassword }, email);
 
-        return true;
+        return await loginUser(email, password);
     } catch (e) {
         LOGGER('XXX createUser', e);
         return false;
