@@ -166,11 +166,11 @@ export default function Sidebar() {
                 style={{
                     display: 'none',
                     position: 'fixed',
-                    bottom: 0,
+                    top: 0,
                     left: 0,
                     right: 0,
                     background: 'var(--bg-secondary)',
-                    borderTop: '1px solid var(--border-color)',
+                    borderBottom: '1px solid var(--border-color)',
                     padding: 'var(--space-sm) var(--space-md)',
                     justifyContent: 'space-around',
                     zIndex: 40,

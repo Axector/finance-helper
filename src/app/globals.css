@@ -787,7 +787,7 @@ body {
   .main-content {
     margin-left: 0;
     padding: var(--space-md);
-    padding-bottom: 80px;
+    padding-top: 80px;
   }
 
   .stats-grid {
