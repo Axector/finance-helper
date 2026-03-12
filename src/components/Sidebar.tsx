@@ -9,12 +9,14 @@ import {
     Target,
     ChevronLeft,
     Wallet,
+    User,
 } from 'lucide-react';
 
 const navItems = [
     { href: '/', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/transactions', label: 'Transactions', icon: ArrowLeftRight },
     { href: '/budget', label: 'Budget', icon: Target },
+    { href: '/user', label: 'User', icon: User },
 ];
 
 export default function Sidebar() {

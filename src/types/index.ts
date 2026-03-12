@@ -1,9 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export type TransactionType = 'income' | 'expense';
 
-export type Category =
-  | 'salary'
-  | 'freelance'
-  | 'investments'
+export type ExpenseCategory =
   | 'food'
   | 'transport'
   | 'entertainment'
@@ -13,6 +12,14 @@ export type Category =
   | 'education'
   | 'travel'
   | 'other';
+
+export type IncomeCategory =
+  | 'salary'
+  | 'freelance'
+  | 'investments'
+  | 'other';
+
+export type Category = ExpenseCategory | IncomeCategory;
 
 export interface Transaction {
   id: string;
@@ -61,10 +68,20 @@ export interface BudgetProgress {
   percentage: number;
 }
 
-export const CATEGORY_LABELS: Record<Category, string> = {
+export interface User {
+  email: string,
+  budgetPlans?: any,
+  transactions?: any,
+}
+
+export const INCOME_CATEGORY_LABELS: Record<IncomeCategory, string> = {
   salary: 'Salary',
   freelance: 'Freelance',
   investments: 'Investments',
+  other: 'Other',
+}
+
+export const EXPENSE_CATEGORY_LABELS: Record<ExpenseCategory, string> = {
   food: 'Food & Dining',
   transport: 'Transport',
   entertainment: 'Entertainment',
@@ -74,7 +91,12 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   education: 'Education',
   travel: 'Travel',
   other: 'Other',
-};
+}
+
+export const CATEGORY_LABELS: Record<Category, string> = {
+  ...INCOME_CATEGORY_LABELS,
+  ...EXPENSE_CATEGORY_LABELS,
+}
 
 export const CATEGORY_COLORS: Record<Category, string> = {
   salary: '#10b981',

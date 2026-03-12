@@ -10,6 +10,7 @@ import {
     EXPENSE_CATEGORIES,
 } from '@/types';
 import { generateId } from '@/lib/storage';
+import { getCurrentDateTime } from '@/lib/stats';
 
 interface Props {
     onSubmit: (transaction: Transaction) => void;
@@ -21,7 +22,7 @@ export default function TransactionForm({ onSubmit, onClose }: Props) {
     const [amount, setAmount] = useState('');
     const [category, setCategory] = useState<Category>('food');
     const [description, setDescription] = useState('');
-    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+    const [date, setDate] = useState(getCurrentDateTime());
 
     const categories = type === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
 
@@ -97,7 +98,7 @@ export default function TransactionForm({ onSubmit, onClose }: Props) {
                         <div className="form-group">
                             <label>Date</label>
                             <input
-                                type="date"
+                                type="datetime-local"
                                 value={date}
                                 onChange={(e) => setDate(e.target.value)}
                                 required

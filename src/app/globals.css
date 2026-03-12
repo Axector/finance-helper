@@ -85,7 +85,7 @@ body {
   background: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
-  min-height: 100vh;
+  height: 100vh;
   overflow-x: hidden;
 }
 
@@ -118,6 +118,7 @@ body {
   margin-left: var(--sidebar-width);
   padding: var(--space-xl);
   min-height: 100vh;
+  max-width: 100vw;
   transition: margin-left var(--transition-normal);
 }
 
@@ -715,6 +716,25 @@ body {
   font-size: 0.95rem;
   font-weight: 600;
   margin-bottom: var(--space-md);
+}
+
+/* User Page */
+.login {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.login .btn {
+  justify-content: center;
+}
+
+.user-email {
+  margin-bottom: var(--space-md);
+}
+
+.user-email span {
+  font-weight: bold;
 }
 
 /* Empty State */

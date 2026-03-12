@@ -145,3 +145,15 @@ export function getBudgetProgress(
         };
     });
 }
+
+
+export function getCurrentDateTime() {
+    const currentDate = new Date();
+    const currentDateOnly = currentDate.toISOString().split('T')[0];
+    const currentHours = currentDate.getHours();
+    const formattedHours = currentHours < 10 ? `0${currentHours}` : currentHours;
+    const currentMinutes = currentDate.getMinutes();
+    const formattedMinutes = currentMinutes < 10 ? `0${currentMinutes}` : currentMinutes;
+
+    return `${currentDateOnly}T${formattedHours}:${formattedMinutes}`;
+}

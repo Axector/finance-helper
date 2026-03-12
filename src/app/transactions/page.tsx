@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
@@ -13,6 +15,8 @@ import {
     TransactionType,
     Category,
     CATEGORY_LABELS,
+    EXPENSE_CATEGORY_LABELS,
+    INCOME_CATEGORY_LABELS,
 } from '@/types';
 import {
     getTransactions,
@@ -59,6 +63,17 @@ export default function TransactionsPage() {
         const expense = filtered.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
         return { income, expense, net: income - expense };
     }, [filtered]);
+
+    const getCategoryFilterLabels = () => {
+        switch (typeFilter) {
+            case 'expense':
+                return EXPENSE_CATEGORY_LABELS;
+            case 'income':
+                return INCOME_CATEGORY_LABELS;
+            default:
+                return CATEGORY_LABELS;
+        }
+    }
 
     if (!mounted) {
         return (
@@ -122,7 +137,7 @@ export default function TransactionsPage() {
                     onChange={(e) => setCategoryFilter(e.target.value as 'all' | Category)}
                 >
                     <option value="all">All Categories</option>
-                    {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
+                    {Object.entries(getCategoryFilterLabels()).map(([key, label]) => (
                         <option key={key} value={key}>{label}</option>
                     ))}
                 </select>
