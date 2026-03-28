@@ -5,7 +5,7 @@ import { compareHashPassword, hashPassword } from './bcrypt';
 const TRANSACTIONS_KEY = 'finance_helper_transactions';
 const BUDGETS_KEY = 'finance_helper_budgets';
 const USER_KEY = 'finance_helper_user';
-const LOGGER = process.env.NEXT_PUBLIC_DEVELOPMENT ? console.log : () => {};
+const LOGGER = process.env.NEXT_PUBLIC_DEVELOPMENT ? console.log : () => { };
 
 export function getTransactions(): Transaction[] {
     if (typeof window === 'undefined') return [];
@@ -24,6 +24,14 @@ export function saveTransactions(transactions: Transaction[], isInitial: boolean
 export function addTransaction(transaction: Transaction): Transaction[] {
     const transactions = getTransactions();
     transactions.unshift(transaction);
+    saveTransactions(transactions);
+    return transactions;
+}
+
+export function udpateTransaction(transaction: Transaction): Transaction[] {
+    const transactions = getTransactions();
+    const currentIndex = transactions.findIndex((t) => transaction.id === t.id);
+    transactions[currentIndex] = transaction;
     saveTransactions(transactions);
     return transactions;
 }

@@ -9,7 +9,7 @@ import {
   ArrowUpRight,
   ArrowDownRight,
 } from 'lucide-react';
-import { Transaction, BudgetPeriod, CATEGORY_LABELS } from '@/types';
+import { BudgetPeriod, CATEGORY_LABELS } from '@/types';
 import { getTransactions, getBudgetPlans } from '@/lib/storage';
 import {
   filterByPeriod,
@@ -25,7 +25,7 @@ import CategoryPieChart from '@/components/charts/CategoryPieChart';
 import BudgetBarChart from '@/components/charts/BudgetBarChart';
 
 export default function DashboardPage() {
-  const [period, setPeriod] = useState<BudgetPeriod>('monthly');
+  const [period, setPeriod] = useState<BudgetPeriod>('daily');
   const [mounted, setMounted] = useState(false);
 
   const allTransactions = mounted ? getTransactions() : [];
@@ -40,6 +40,7 @@ export default function DashboardPage() {
   const recent = allTransactions.slice(0, 5);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
@@ -64,7 +65,7 @@ export default function DashboardPage() {
 
       {/* Period Toggle */}
       <div className="period-toggle">
-        {(['daily', 'monthly', 'yearly'] as BudgetPeriod[]).map((p) => (
+        {(['hourly', 'daily', 'weekly', 'monthly', 'yearly'] as BudgetPeriod[]).map((p) => (
           <button
             key={p}
             className={p === period ? 'active' : ''}

@@ -30,7 +30,7 @@ export interface Transaction {
   date: string; // ISO date string
 }
 
-export type BudgetPeriod = 'daily' | 'monthly' | 'yearly';
+export type BudgetPeriod = 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly';
 
 export interface BudgetPlan {
   id: string;

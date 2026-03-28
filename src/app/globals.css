@@ -272,6 +272,12 @@ body {
   padding: 3px;
   gap: 2px;
   margin-bottom: var(--space-xl);
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.period-toggle::-webkit-scrollbar {
+  display: none;
 }
 
 .period-toggle button {
@@ -466,18 +472,32 @@ body {
   gap: var(--space-sm);
 }
 
+.transaction-item-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+}
+
 .transaction-item {
   display: flex;
   align-items: center;
+  width: 100%;
   gap: var(--space-md);
   padding: var(--space-md);
+  padding-right: calc(var(--space-md) + 24px + var(--space-md));
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   transition: all var(--transition-fast);
+  color: var(--text-primary);
+  text-align: left;
 }
 
-.transaction-item:hover {
+.transaction-item-wrapper .transaction-item {
+  cursor: pointer;
+}
+
+.transaction-item-wrapper:hover .transaction-item {
   background: var(--bg-card-hover);
   border-color: var(--border-active);
 }
@@ -539,6 +559,10 @@ body {
 }
 
 .transaction-delete {
+  position: absolute;
+  right: var(--space-md);
+  top: 50%;
+  transform: translateY(-50%);
   opacity: 0;
   transition: opacity var(--transition-fast);
   background: none;
@@ -555,7 +579,7 @@ body {
   background: var(--accent-red-soft);
 }
 
-.transaction-item:hover .transaction-delete {
+.transaction-item-wrapper:hover .transaction-delete {
   opacity: 1;
 }
 
