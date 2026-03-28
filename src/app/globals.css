@@ -825,6 +825,10 @@ body {
   .charts-grid {
     grid-template-columns: 1fr;
   }
+
+  .transaction-delete {
+    opacity: 1;
+  }
 }
 
 @media (max-width: 768px) {
