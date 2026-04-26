@@ -2,6 +2,7 @@
 
 import { initializeApp } from "firebase/app";
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import Logger from "@/lib/logger";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -15,7 +16,6 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const mainCollectionName = process.env.NEXT_PUBLIC_FIREBASE_MAIN_COLLECTION_NAME as string;
-const LOGGER = process.env.NEXT_PUBLIC_DEVELOPMENT ? console.log : () => {};
 
 export class DataBaseController {
   static getCleanData = (firebaseData: any) => {
@@ -74,7 +74,7 @@ export class DataBaseController {
 
       return this.getCleanData(fields);
     } catch (e) {
-      LOGGER('XXX DataBaseController.read:', e);
+      Logger.warn('XXX DataBaseController.read:', e);
       return null;
     }
   };
@@ -88,7 +88,7 @@ export class DataBaseController {
 
       return true;
     } catch (e) {
-      LOGGER('XXX DataBaseController.update:', e);
+      Logger.warn('XXX DataBaseController.update:', e);
       return false;
     }
   };

@@ -8,9 +8,15 @@ import {
   BudgetPeriod,
   CATEGORY_COLORS,
   Category,
+  AccountData,
+  FilteredAccountData,
 } from '@/types';
 
 const YEARS_TO_SHOW = 4;
+
+export function filterByAccounts(transactions: Transaction[], filteredAccounts: FilteredAccountData[]): Transaction[] {
+  return transactions.filter((t) => !!filteredAccounts.find((a) => t.accountId === a.id));
+}
 
 export function filterByPeriod(transactions: Transaction[], period: BudgetPeriod): Transaction[] {
   const now = new Date();
@@ -32,22 +38,19 @@ export function filterByPeriod(transactions: Transaction[], period: BudgetPeriod
   });
 }
 
-export function computeStats(transactions: Transaction[]): DashboardStats {
+export function computeStats(transactions: Transaction[], accounts: AccountData[]): DashboardStats {
   const totalIncome = transactions
     .filter((t) => t.type === 'income')
     .reduce((sum, t) => sum + t.amount, 0);
   const totalExpenses = transactions
     .filter((t) => t.type === 'expense')
     .reduce((sum, t) => sum + t.amount, 0);
-  const balance = totalIncome - totalExpenses;
-  const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpenses) / totalIncome) * 100 : 0;
+  const balance = accounts.reduce((acc, curr) => acc + +curr.total, 0);
 
   return {
     totalIncome,
     totalExpenses,
     balance,
-    savingsRate: Math.round(savingsRate * 10) / 10,
-    transactionCount: transactions.length,
   };
 }
 
@@ -167,14 +170,38 @@ export function getTimeSeries(transactions: Transaction[], period: BudgetPeriod)
   return points;
 }
 
+export function filterBudgetByPeriod(transactions: Transaction[], period: BudgetPeriod): Transaction[] {
+  const now = new Date('2026-04-27T14:56:19');
+  const nowQuarter = Math.ceil((now.getMonth() + 1) / 3);
+
+  return transactions.filter((t) => {
+    const d = new Date(t.date);
+    const diffDays = Math.abs(+now - +d) / (1000 * 60 * 60 * 24);
+    const dQuarter = Math.ceil((d.getMonth() + 1) / 3);
+
+    switch (period) {
+      case 'daily':
+        return diffDays < 1;
+      case 'weekly':
+        return diffDays < now.getDay() || (now.getDay() === 0 && diffDays < 7);
+      case 'monthly':
+        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+      case 'quarterly':
+        return dQuarter === nowQuarter && d.getFullYear() === now.getFullYear();
+      case 'yearly':
+        return d.getFullYear() === now.getFullYear();
+    }
+  });
+}
+
 export function getBudgetProgress(
   plans: BudgetPlan[],
   transactions: Transaction[]
 ): BudgetProgress[] {
   return plans.map((plan) => {
-    const periodTransactions = filterByPeriod(transactions, plan.period);
+    const periodTransactions = filterBudgetByPeriod(transactions, plan.period);
     const spent = periodTransactions
-      .filter((t) => t.type === 'expense' && t.category === plan.category)
+      .filter((t) => t.type === 'expense' && t.category === plan.category && t.otherCategory === plan.otherCategory)
       .reduce((sum, t) => sum + t.amount, 0);
     const remaining = Math.max(0, plan.limit - spent);
     const percentage = plan.limit > 0 ? Math.min(100, (spent / plan.limit) * 100) : 0;
@@ -186,19 +213,4 @@ export function getBudgetProgress(
       percentage: Math.round(percentage * 10) / 10,
     };
   });
-}
-
-export function getDateTime(date: Date) {
-  const dateOnly = date.toISOString().split('T')[0].split('-').slice(0, 2).join('-');
-  const day = date.getDate();
-  const hours = date.getHours();
-  const formattedHours = hours < 10 ? `0${hours}` : hours;
-  const minutes = date.getMinutes();
-  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-
-  return `${dateOnly}-${day}T${formattedHours}:${formattedMinutes}`;
-}
-
-export function getCurrentDateTime() {
-  return (getDateTime(new Date()))
 }

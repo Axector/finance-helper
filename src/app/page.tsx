@@ -5,20 +5,20 @@ import {
   TrendingUp,
   TrendingDown,
   DollarSign,
-  PiggyBank,
   ArrowUpRight,
   ArrowDownRight,
 } from 'lucide-react';
-import { BudgetPeriod, CATEGORY_LABELS } from '@/types';
-import { getTransactions, getBudgetPlans } from '@/lib/storage';
+import { BudgetPeriod, CATEGORY_LABELS, FilteredAccountData } from '@/types';
+import { getTransactions, getBudgetPlans, getAccounts } from '@/lib/storage';
 import {
   filterByPeriod,
   computeStats,
   getCategoryBreakdown,
   getTimeSeries,
   getBudgetProgress,
+  filterByAccounts,
 } from '@/lib/stats';
-
+import { CURRENCY } from '@/lib/common';
 import StatCard from '@/components/StatCard';
 import IncomeExpenseChart from '@/components/charts/IncomeExpenseChart';
 import CategoryPieChart from '@/components/charts/CategoryPieChart';
@@ -27,12 +27,15 @@ import BudgetBarChart from '@/components/charts/BudgetBarChart';
 export default function DashboardPage() {
   const [period, setPeriod] = useState<BudgetPeriod>('daily');
   const [mounted, setMounted] = useState(false);
+  const accounts = getAccounts();
+  const [accountFilter, setAccountFilter] = useState<FilteredAccountData[]>(accounts.map((a) => ({ ...a, selected: true })));
 
   const allTransactions = mounted ? getTransactions() : [];
   const budgetPlans = mounted ? getBudgetPlans() : [];
 
-  const filtered = filterByPeriod(allTransactions, period);
-  const stats = computeStats(filtered);
+  const filteredAccounts = accountFilter.filter((a) => a.selected);
+  const filtered = filterByAccounts(filterByPeriod(allTransactions, period), filteredAccounts);
+  const stats = computeStats(filtered, filteredAccounts);
   const categoryBreakdown = getCategoryBreakdown(filtered);
   const timeSeries = getTimeSeries(filtered, period);
   const budgetProgress = getBudgetProgress(budgetPlans, allTransactions);
@@ -45,7 +48,7 @@ export default function DashboardPage() {
   }, []);
 
   const formatCurrency = useCallback((val: number) => {
-    return '$' + val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return CURRENCY + val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }, []);
 
   if (!mounted) {
@@ -76,6 +79,26 @@ export default function DashboardPage() {
         ))}
       </div>
 
+      {/* Account Filter */}
+      <div className="account-filter-wrapper">
+        {accountFilter.map((a) => (
+          <div key={a.id} className="account-filter">
+            <label htmlFor={`account-filter-${a.id}`}>{a.name}</label>
+            <input
+              type='checkbox'
+              id={`account-filter-${a.id}`}
+              value={a.id}
+              checked={a.selected}
+              onChange={() => {
+                setAccountFilter(accountFilter.map((af) => {
+                  return af.id === a.id ? { ...af, selected: !af.selected } : af;
+                }))
+              }}
+            />
+          </div>
+        ))}
+      </div>
+
       {/* Stat Cards */}
       <div className="stats-grid">
         <StatCard
@@ -98,13 +121,6 @@ export default function DashboardPage() {
           subtitle={stats.balance >= 0 ? 'You\'re on track!' : 'Over budget'}
           icon={<DollarSign size={20} />}
           color="blue"
-        />
-        <StatCard
-          label="Savings Rate"
-          value={`${stats.savingsRate}%`}
-          subtitle={stats.savingsRate >= 20 ? 'Great savings!' : 'Try to save more'}
-          icon={<PiggyBank size={20} />}
-          color="purple"
         />
       </div>
 
@@ -141,7 +157,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 <div className={`transaction-amount ${t.type}`}>
-                  {t.type === 'income' ? '+' : '-'}${t.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  {t.type === 'income' ? '+' : '-'}{CURRENCY}{t.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </div>
               </div>
             ))

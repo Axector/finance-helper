@@ -26,16 +26,18 @@ export interface Transaction {
   type: TransactionType;
   amount: number;
   category: Category;
+  otherCategory: string;
   description: string;
   date: string; // ISO date string
+  accountId: string;
 }
 
-export type BudgetPeriod = 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly';
+export type BudgetPeriod = 'hourly' | 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly';
 
 export interface BudgetPlan {
   id: string;
-  name: string;
   category: Category;
+  otherCategory: string;
   limit: number;
   period: BudgetPeriod;
 }
@@ -44,8 +46,6 @@ export interface DashboardStats {
   totalIncome: number;
   totalExpenses: number;
   balance: number;
-  savingsRate: number;
-  transactionCount: number;
 }
 
 export interface CategoryBreakdown {
@@ -125,3 +125,18 @@ export const EXPENSE_CATEGORIES: Category[] = [
   'travel',
   'other',
 ];
+
+export type AccountData = {
+  id: string,
+  name: string,
+  total: number,
+  openDate: string,
+};
+
+export type FilteredAccountData = AccountData & {
+  selected: boolean,
+};
+
+export type TransferData = {
+  id: string,
+}

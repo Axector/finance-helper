@@ -9,8 +9,8 @@ import {
   INCOME_CATEGORIES,
   EXPENSE_CATEGORIES,
 } from '@/types';
-import { generateId } from '@/lib/storage';
-import { getCurrentDateTime } from '@/lib/stats';
+import { generateId, getAccounts } from '@/lib/storage';
+import { CURRENCY, getCurrentDateTime } from '@/lib/common';
 
 interface Props {
   onSubmit: (transaction: Transaction, isUpdate?: boolean) => void;
@@ -20,8 +20,10 @@ interface Props {
     type?: TransactionType,
     amount?: string,
     category?: Category,
+    otherCategory?: string,
     description?: string,
     date?: string,
+    accountId?: string,
   };
 }
 
@@ -29,13 +31,16 @@ export default function TransactionForm({ onSubmit, onClose, data }: Props) {
   const [type, setType] = useState<TransactionType>(data?.type ?? 'expense');
   const [amount, setAmount] = useState(data?.amount ?? '');
   const [category, setCategory] = useState<Category>(data?.category ?? 'food');
+  const [otherCategory, setOtherCategory] = useState(data?.otherCategory ?? '');
   const [description, setDescription] = useState(data?.description ?? '');
   const [date, setDate] = useState(data?.date ?? getCurrentDateTime());
+  const accounts = getAccounts();
+  const [accountId, setAccountId] = useState(data?.accountId || accounts[0].id);
 
   const isUpdate = !!data?.amount;
   const categories = type === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
     if (!amount || !description) return;
 
@@ -44,8 +49,10 @@ export default function TransactionForm({ onSubmit, onClose, data }: Props) {
       type,
       amount: parseFloat(amount),
       category,
+      otherCategory,
       description,
-      date: new Date(date).toISOString(),
+      date: getCurrentDateTime(date),
+      accountId,
     };
     onSubmit(transaction, isUpdate);
   };
@@ -55,6 +62,20 @@ export default function TransactionForm({ onSubmit, onClose, data }: Props) {
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <h2>Add Transaction</h2>
         <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Account</label>
+            <select
+              value={accountId}
+              onChange={(e) => setAccountId(e.target.value)}
+            >
+              {accounts.map((account, i) => (
+                <option key={i} value={account.id}>
+                  {account.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* Type toggle */}
           <div className="form-group">
             <label>Type</label>
@@ -92,7 +113,7 @@ export default function TransactionForm({ onSubmit, onClose, data }: Props) {
 
           <div className="form-row">
             <div className="form-group">
-              <label>Amount ($)</label>
+              <label>Amount ({CURRENCY})</label>
               <input
                 type="number"
                 step="0.01"
@@ -119,7 +140,10 @@ export default function TransactionForm({ onSubmit, onClose, data }: Props) {
             <label>Category</label>
             <select
               value={category}
-              onChange={(e) => setCategory(e.target.value as Category)}
+              onChange={(e) => {
+                setCategory(e.target.value as Category);
+                setOtherCategory('');
+              }}
             >
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
@@ -128,6 +152,19 @@ export default function TransactionForm({ onSubmit, onClose, data }: Props) {
               ))}
             </select>
           </div>
+
+          {category === 'other' && (
+            <div className="form-group">
+              <label>Other Category</label>
+              <input
+                type="text"
+                value={otherCategory}
+                onChange={(e) => setOtherCategory(e.target.value)}
+                placeholder="Specify other category"
+                required
+              />
+            </div>
+          )}
 
           <div className="form-group">
             <label>Description</label>

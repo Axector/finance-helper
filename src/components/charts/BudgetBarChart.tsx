@@ -29,7 +29,7 @@ export default function BudgetBarChart({ data }: Props) {
   }
 
   const chartData = data.map((d) => ({
-    name: d.plan.name,
+    name: d.plan.otherCategory || CATEGORY_LABELS[d.plan.category],
     percentage: d.percentage,
     spent: d.spent,
     limit: d.plan.limit,

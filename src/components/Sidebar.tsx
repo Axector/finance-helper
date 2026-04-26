@@ -10,10 +10,12 @@ import {
     ChevronLeft,
     Wallet,
     User,
+    DollarSign,
 } from 'lucide-react';
 
 const navItems = [
     { href: '/', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/accounts', label: 'Accounts', icon: DollarSign },
     { href: '/transactions', label: 'Transactions', icon: ArrowLeftRight },
     { href: '/budget', label: 'Budget', icon: Target },
     { href: '/user', label: 'User', icon: User },

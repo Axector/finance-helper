@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, ReactNode } from 'react';
 import {
   Plus,
   ArrowUpRight,
@@ -23,9 +23,10 @@ import {
   addTransaction,
   deleteTransaction,
   udpateTransaction,
+  getAccount,
 } from '@/lib/storage';
 import TransactionForm from '@/components/TransactionForm';
-import { getDateTime } from '@/lib/stats';
+import { CURRENCY } from '@/lib/common';
 
 export default function TransactionsPage() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -88,6 +89,11 @@ export default function TransactionsPage() {
     return filters.filter(([label]) => (
       !!transactions.find((transaction) => transaction.category === label)
     ));
+  }
+
+  const getAccountName = (accountId: string): ReactNode => {
+    const accountName = getAccount(accountId)?.name;
+    return accountName ? <div className="transaction-account">Account: {accountName}</div> : '';
   }
 
   if (!mounted) {
@@ -190,24 +196,27 @@ export default function TransactionsPage() {
               <button
                 onClick={() => {
                   setShowForm(true);
-                  setFormData({ ...t, date: getDateTime(new Date(t.date)) })
+                  setFormData(t);
                 }}
                 className="transaction-item"
                 style={{ animation: `slideInRight ${200 + i * 30}ms ease forwards` }}
               >
-                <div className={`transaction-icon ${t.type}`}>
-                  {t.type === 'income' ? <ArrowUpRight size={18} /> : <ArrowDownRight size={18} />}
-                </div>
                 <div className="transaction-details">
-                  <div className="transaction-desc">{t.description}</div>
-                  <div className="transaction-meta">
-                    <span>{CATEGORY_LABELS[t.category]}</span>
-                    <span>•</span>
-                    <span>{new Date(t.date).toLocaleDateString()}</span>
+                  <div className={`transaction-icon ${t.type}`}>
+                    {t.type === 'income' ? <ArrowUpRight size={18} /> : <ArrowDownRight size={18} />}
+                  </div>
+                  <div className="transaction-details-content">
+                    <div className="transaction-desc">{t.description}</div>
+                    {getAccountName(t.accountId)}
+                    <div className="transaction-meta">
+                      <span>{t.otherCategory || CATEGORY_LABELS[t.category]}</span>
+                      <span>•</span>
+                      <span>{new Date(t.date).toLocaleDateString()}</span>
+                    </div>
                   </div>
                 </div>
                 <div className={`transaction-amount ${t.type}`}>
-                  {t.type === 'income' ? '+' : '-'}${t.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  {t.type === 'income' ? '+' : '-'}{CURRENCY}{t.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </div>
               </button>
               <button
@@ -233,7 +242,7 @@ export default function TransactionsPage() {
       {/* Modal */}
       {showForm && (
         <TransactionForm
-          onSubmit={handleAdd}
+          onSubmit={(...args) => handleAdd(...args)}
           onClose={() => {
             setShowForm(false);
             setFormData({});
