@@ -971,6 +971,20 @@ body {
     max-width: 80vw;
   }
 
+  .account-total-card {
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  .account-card {
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  .stat-delete {
+    opacity: 1;
+  }
+
   .main-content {
     max-width: 100vw;
     margin-left: 0;
