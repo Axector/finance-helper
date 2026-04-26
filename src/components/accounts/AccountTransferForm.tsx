@@ -57,7 +57,7 @@ export const AccountTransferForm = ({ data, onSubmit, onClose }: Props): ReactNo
           </div>
 
           <div className="form-group">
-            <label>Trasfer amount (${CURRENCY})</label>
+            <label>Trasfer amount ({CURRENCY})</label>
             <input
               type="number"
               step="0.01"

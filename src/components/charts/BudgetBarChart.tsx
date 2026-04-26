@@ -11,6 +11,7 @@ import {
   Cell,
 } from 'recharts';
 import { BudgetProgress, CATEGORY_LABELS } from '@/types';
+import { CURRENCY } from '@/lib/common';
 
 interface Props {
   data: BudgetProgress[];
@@ -75,7 +76,7 @@ export default function BudgetBarChart({ data }: Props) {
             formatter={(value, _name, props) => {
               const v = Number(value);
               const p = props.payload as { spent: number; limit: number };
-              return [`${v.toFixed(1)}% ($${p.spent} / $${p.limit})`, 'Usage'];
+              return [`${v.toFixed(1)}% (${CURRENCY}${p.spent} / ${CURRENCY}${p.limit})`, 'Usage'];
             }}
           />
           <Bar

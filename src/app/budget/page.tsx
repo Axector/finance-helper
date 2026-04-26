@@ -14,6 +14,7 @@ import {
 } from '@/lib/storage';
 import { getBudgetProgress } from '@/lib/stats';
 import BudgetForm from '@/components/BudgetForm';
+import { CURRENCY } from '@/lib/common';
 
 export default function BudgetPage() {
   const [plans, setPlans] = useState<BudgetPlan[]>([]);
@@ -145,10 +146,10 @@ export default function BudgetPage() {
 
                 <div className="budget-stats">
                   <span>
-                    Spent: <strong>${item.spent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong>
+                    Spent: <strong>{CURRENCY}{item.spent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong>
                   </span>
                   <span>
-                    Limit: <strong>${item.plan.limit.toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong>
+                    Limit: <strong>{CURRENCY}{item.plan.limit.toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong>
                   </span>
                   <span
                     style={{

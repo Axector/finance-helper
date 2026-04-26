@@ -11,6 +11,7 @@ import {
   Bar,
 } from 'recharts';
 import { TimeSeriesPoint } from '@/types';
+import { CURRENCY } from '@/lib/common';
 
 interface Props {
   data: TimeSeriesPoint[];
@@ -33,7 +34,7 @@ export default function IncomeExpenseChart({ data }: Props) {
             tick={{ fill: '#9a9ab0', fontSize: 12 }}
             axisLine={false}
             tickLine={false}
-            tickFormatter={(v) => `$${v >= 1000 ? (v / 1000).toFixed(1) + 'k' : v}`}
+            tickFormatter={(v) => `${CURRENCY}${v >= 1000 ? (v / 1000).toFixed(1) + 'k' : v}`}
           />
           <Tooltip
             contentStyle={{
@@ -43,7 +44,7 @@ export default function IncomeExpenseChart({ data }: Props) {
               color: '#f0f0f5',
               fontSize: 13,
             }}
-            formatter={(value) => [`$${Number(value).toLocaleString()}`]}
+            formatter={(value) => [`${CURRENCY}${Number(value).toLocaleString()}`]}
           />
           <Legend
             wrapperStyle={{ fontSize: 12, color: '#9a9ab0' }}

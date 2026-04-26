@@ -123,19 +123,19 @@ export default function TransactionsPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}>
           <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Income:</span>
           <span style={{ color: 'var(--accent-green)', fontWeight: 600 }}>
-            +${totalFiltered.income.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+            +{CURRENCY}{totalFiltered.income.toLocaleString('en-US', { minimumFractionDigits: 2 })}
           </span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}>
           <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Expenses:</span>
           <span style={{ color: 'var(--accent-red)', fontWeight: 600 }}>
-            -${totalFiltered.expense.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+            -{CURRENCY}{totalFiltered.expense.toLocaleString('en-US', { minimumFractionDigits: 2 })}
           </span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}>
           <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Net:</span>
           <span style={{ color: totalFiltered.net >= 0 ? 'var(--accent-green)' : 'var(--accent-red)', fontWeight: 600 }}>
-            ${totalFiltered.net.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+            {CURRENCY}{totalFiltered.net.toLocaleString('en-US', { minimumFractionDigits: 2 })}
           </span>
         </div>
         <div style={{ marginLeft: 'auto', color: 'var(--text-muted)', fontSize: '0.8rem' }}>

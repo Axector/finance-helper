@@ -2,6 +2,7 @@
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { CategoryBreakdown, CATEGORY_LABELS } from '@/types';
+import { CURRENCY } from '@/lib/common';
 
 interface Props {
   data: CategoryBreakdown[];
@@ -48,7 +49,7 @@ export default function CategoryPieChart({ data }: Props) {
               fontSize: 13,
             }}
             formatter={(value, name) => [
-              `$${Number(value).toLocaleString()}`,
+              `${CURRENCY}${Number(value).toLocaleString()}`,
               CATEGORY_LABELS[name as keyof typeof CATEGORY_LABELS] || name,
             ]}
           />
