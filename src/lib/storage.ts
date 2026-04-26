@@ -180,6 +180,11 @@ export async function loginUser(email: string, password: string): Promise<boolea
     saveTransactions(JSON.parse(transactions));
   }
 
+  const { accounts = null } = user;
+  if (accounts) {
+    saveAccounts(JSON.parse(accounts), true);
+  }
+
   saveUser(email);
   return true;
 }
@@ -188,6 +193,7 @@ export async function logoutUser() {
   saveUser('');
   saveTransactions([]);
   saveBudgetPlans([], true);
+  saveAccounts([], true);
 }
 
 export async function updateUserData(email: string): Promise<boolean> {

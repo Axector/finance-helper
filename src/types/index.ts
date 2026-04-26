@@ -72,6 +72,7 @@ export interface User {
   email: string,
   budgetPlans?: any,
   transactions?: any,
+  accounts?: any,
 }
 
 export const INCOME_CATEGORY_LABELS: Record<IncomeCategory, string> = {
