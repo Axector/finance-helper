@@ -15,7 +15,7 @@ import {
 const YEARS_TO_SHOW = 4;
 
 export function filterByAccounts(transactions: Transaction[], filteredAccounts: FilteredAccountData[]): Transaction[] {
-  return transactions.filter((t) => !!filteredAccounts.find((a) => t.accountId === a.id));
+  return transactions.filter((t) => !!filteredAccounts.find((a) => t.accountId === a.id) && t.otherCategory !== 'Internal');
 }
 
 export function filterByPeriod(transactions: Transaction[], period: BudgetPeriod): Transaction[] {

@@ -611,9 +611,7 @@ body {
 .transaction-desc {
   font-weight: 500;
   font-size: 1rem;
-  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .transaction-meta {

@@ -1,7 +1,7 @@
 import { Transaction, BudgetPlan, User, AccountData } from '@/types';
 import DataBaseController from './firebase';
 import { compareHashPassword, hashPassword } from './bcrypt';
-import { getCurrentDate } from './common';
+import { getCurrentDateTime } from './common';
 import Logger from '@/lib/logger';
 
 const TRANSACTIONS_KEY = 'finance_helper_transactions';
@@ -348,7 +348,7 @@ export const makeAccountTransfer = (id: string, otherId: string, amount: number)
     category: 'other',
     otherCategory: 'Internal',
     description: `Transfer from "${account.name}" to "${otherAccount.name}"`,
-    date: getCurrentDate(),
+    date: getCurrentDateTime(),
     accountId: id,
   };
   const otherTransaction: Transaction = {
@@ -358,7 +358,7 @@ export const makeAccountTransfer = (id: string, otherId: string, amount: number)
     category: 'other',
     otherCategory: 'Internal',
     description: `Transfer from "${account.name}" to "${otherAccount.name}"`,
-    date: getCurrentDate(),
+    date: getCurrentDateTime(),
     accountId: otherId,
   };
 
